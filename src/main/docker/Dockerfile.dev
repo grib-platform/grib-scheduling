@@ -1,0 +1,19 @@
+# Docker file
+
+# 1. Build Stage
+FROM eclipse-temurin:17-jre-alpine
+
+# 2. WORK DIR 설정
+WORKDIR /DEV-SCHEDULING
+
+# 3. 빌드 된 jar 파일 복사
+COPY build/libs/*.jar  dev-scheduling.jar
+
+# 4. 권한 설정
+RUN chmod 777 dev-scheduling.jar
+
+# 5. 컨테이너 포트 노출
+EXPOSE 9997
+
+# 6. 애플리케이션 실행 명령어
+ENTRYPOINT ["java" , "-jar", "dev-scheduling.jar"]

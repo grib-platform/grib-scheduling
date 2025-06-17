@@ -86,25 +86,29 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private Runnable getRunnable(ScheduleDto param) {
       return () -> {
-        try{
-          Optional<Client> client = clientRepository.findById(param.getClientId());
-          if(client.isPresent()){
-            WebClient webClient = WebClient.create(client.get().getCallbackUrl());
-            JSONObject messageJson = new JSONObject(param.getApiBody());
-            Map<String, Object> bodyMap = messageJson.toMap();
-            String response = webClient.post()
-                                      .header("Authorization", "Bearer " + client.get().getAccessToken())
-                                      .bodyValue(bodyMap)
-                                      .retrieve()
-                                      .bodyToMono(String.class)
-                                      .block();
-            log.info(response);
-          }else{
-            log.info(param.getClientId() + " : client is null.");
-          }
-        }catch(Exception e){
-          e.printStackTrace();
-        }
+        System.out.println(param.getScheduleId());
+        System.out.println(param.getScheduleId() +" : "+ param.getCronExpression());
+        System.out.println(param.getScheduleId() +" : "+ param.getClientId());
+        System.out.println(param.getScheduleId() +" : "+ param.getApiBody());
+        // try{
+        //   Optional<Client> client = clientRepository.findById(param.getClientId());
+        //   if(client.isPresent()){
+        //     WebClient webClient = WebClient.create(client.get().getCallbackUrl());
+        //     JSONObject messageJson = new JSONObject(param.getApiBody());
+        //     Map<String, Object> bodyMap = messageJson.toMap();
+        //     String response = webClient.post()
+        //                               .header("Authorization", "Bearer " + client.get().getAccessToken())
+        //                               .bodyValue(bodyMap)
+        //                               .retrieve()
+        //                               .bodyToMono(String.class)
+        //                               .block();
+        //     log.info(response);
+        //   }else{
+        //     log.info(param.getClientId() + " : client is null.");
+        //   }
+        // }catch(Exception e){
+        //   e.printStackTrace();
+        // }
       };
     }
 

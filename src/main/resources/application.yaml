@@ -1,0 +1,44 @@
+spring:
+    application:
+        name: GRIB-SCHEDULING
+    profiles:
+        group:
+            local: local
+            dev: dev
+---
+server:
+    port: 8080
+spring:
+    config:
+        activate:
+            on-profile: local
+    datasource:
+        url: jdbc:mysql://localhost:3306/grib_scheduling
+        username: root
+        password: grib12#$
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        database: mysql
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+    client:
+        secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
+---
+server:
+    port: 9997
+spring:
+    config:
+        activate:
+            on-profile: dev
+    datasource:
+        url: jdbc:mysql://192.168.0.240:3306/scheduling_dev
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: grib
+        password: grib12!@
+    jpa:
+        database: mysql
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        hibernate:
+            ddl-auto: none
+        show-sql: true
+    client:
+        secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu

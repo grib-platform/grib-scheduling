@@ -16,4 +16,4 @@ RUN chmod 777 dev-scheduling.jar
 EXPOSE 9997
 
 # 6. 애플리케이션 실행 명령어
-ENTRYPOINT ["java" , "-jar", "dev-scheduling.jar"]
+ENTRYPOINT ["java" , "-Duser.timezone=Asia/Seoul", "-jar", "dev-scheduling.jar"]

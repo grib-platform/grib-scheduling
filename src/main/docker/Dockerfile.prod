@@ -16,4 +16,4 @@ COPY build/libs/*.jar  prod-scheduling.jar
 EXPOSE 9997
 
 # 6. 애플리케이션 실행 명령어
-ENTRYPOINT ["java" , "-jar", "prod-scheduling.jar"]
+ENTRYPOINT ["java" , "-Duser.timezone=Asia/Seoul", "-jar", "prod-scheduling.jar"]

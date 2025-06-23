@@ -14,6 +14,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import kr.co.grib.scheduling.domain.Client;
@@ -59,11 +60,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
       }catch(Exception e){
         e.printStackTrace();
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         return ResponseDto.error("FAIL", e.getMessage(), null);
       }
     }
     
     @Override
+    @Transactional
     public ResponseDto<Void> startScheduleInit(ScheduleDto param) {
       try{
         Schedule newSchedule = Schedule.builder()
@@ -80,6 +83,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return ResponseDto.data(null);
       }catch(Exception e){
         e.printStackTrace();
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         return ResponseDto.error("FAIL", e.getMessage(), null);
       }
     }
@@ -122,6 +126,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return ResponseDto.data(null);
       }catch(Exception e){
         e.printStackTrace();
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         return ResponseDto.error("FAIL", e.getMessage(), null);
       }
     }

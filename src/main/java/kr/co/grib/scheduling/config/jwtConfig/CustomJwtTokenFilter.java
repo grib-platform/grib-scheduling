@@ -36,6 +36,11 @@ public class CustomJwtTokenFilter extends OncePerRequestFilter {
         String token = null;
         try {
             token = authorizationHeader.split(" ")[1].trim();
+        }catch (NullPointerException e){
+            log.error("토큰을 분리하는데 실패했습니다. - {}", authorizationHeader);
+            request.setAttribute("apiStatus", "TOKEN_VALUE_ERR");
+            filterChain.doFilter(request, response);
+            return;
         } catch (Exception e) {
             log.error("토큰을 분리하는데 실패했습니다. - {}", authorizationHeader);
             request.setAttribute("apiStatus", "TOKEN_VALUE_ERR");
@@ -56,6 +61,11 @@ public class CustomJwtTokenFilter extends OncePerRequestFilter {
             request.setAttribute("apiStatus", "NORMAL");
             request.setAttribute("oauthRoles", stringRoles);
             filterChain.doFilter(request, response);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            request.setAttribute("apiStatus", e.getMessage());
+            filterChain.doFilter(request, response);
+            return;
         }catch(Exception e){
             e.printStackTrace();
             request.setAttribute("apiStatus", e.getMessage());

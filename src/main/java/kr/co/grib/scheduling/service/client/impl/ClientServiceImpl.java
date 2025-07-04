@@ -37,6 +37,8 @@ public class ClientServiceImpl implements ClientService {
                             .build();
             clientRepository.save(client);
             return ResponseDto.data(null);
+        }catch (NullPointerException e){
+            throw new RuntimeException(e.getMessage(), e);
         }catch(Exception e){
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -72,6 +74,8 @@ public class ClientServiceImpl implements ClientService {
                 }).toList();
             }
             return ResponseDto.data(clientDtoList, PageResponse.of(pageNumber, pageSize, clientList.getTotalElements()));
+        }catch (NullPointerException e){
+            throw new RuntimeException(e.getMessage(), e);
         }catch(Exception e){
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -88,6 +92,8 @@ public class ClientServiceImpl implements ClientService {
             }
             clientRepository.save(clientObj);
             return ResponseDto.data(null);
+        }catch (NullPointerException e){
+            throw new RuntimeException(e.getMessage(), e);
         }catch(Exception e){
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -100,6 +106,8 @@ public class ClientServiceImpl implements ClientService {
             Optional<Client> client = clientRepository.findById(param.getClientId());
             clientRepository.delete(client.get());
             return ResponseDto.data(null);
+        }catch (NullPointerException e){
+            throw new RuntimeException(e.getMessage(), e);
         }catch(Exception e){
             throw new RuntimeException(e.getMessage(), e);
         }

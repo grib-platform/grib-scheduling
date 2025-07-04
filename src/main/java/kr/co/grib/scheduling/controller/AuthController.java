@@ -39,6 +39,9 @@ public class AuthController {
 								.bodyToMono(String.class)
 								.block();
 			return response;
+        }catch (NullPointerException e){
+			e.printStackTrace();
+			throw new RuntimeException("WebClient Error, Check your parameter.", e);
 		}catch(Exception e){
 			e.printStackTrace();
 			throw new RuntimeException("WebClient Error, Check your parameter.", e);

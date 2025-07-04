@@ -30,6 +30,8 @@ public class InitScheduler{
                 ScheduleDto scheduleDto = new ScheduleDto(schedule);
                 scheduleService.startScheduleInit(scheduleDto);
             }
+        }catch (NullPointerException e){
+            e.printStackTrace();
         }catch (Exception e){
             e.printStackTrace();
         }

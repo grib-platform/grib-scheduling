@@ -58,6 +58,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         }else{
           return ResponseDto.error("FAIL", "schedule is already exist", null);
         }
+      }catch (NullPointerException e){
+        e.printStackTrace();
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        return ResponseDto.error("FAIL", e.getMessage(), null);
       }catch(Exception e){
         e.printStackTrace();
 		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -81,6 +85,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduler.schedule(getRunnable(param), new CronTrigger(param.getCronExpression()));
         scheduledMap.put(param.getScheduleId(), scheduler);
         return ResponseDto.data(null);
+      }catch (NullPointerException e){
+        e.printStackTrace();
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        return ResponseDto.error("FAIL", e.getMessage(), null);
       }catch(Exception e){
         e.printStackTrace();
 		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -124,6 +132,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.delete(schedule.get());
         scheduledMap.get(param.getScheduleId()).shutdown();
         return ResponseDto.data(null);
+      }catch (NullPointerException e){
+        e.printStackTrace();
+		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        return ResponseDto.error("FAIL", e.getMessage(), null);
       }catch(Exception e){
         e.printStackTrace();
 		    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

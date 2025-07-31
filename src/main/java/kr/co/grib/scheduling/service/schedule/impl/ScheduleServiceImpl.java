@@ -24,6 +24,7 @@ import kr.co.grib.scheduling.dto.common.PageResponse;
 import kr.co.grib.scheduling.dto.common.ResponseDto;
 import kr.co.grib.scheduling.repository.ClientRepository;
 import kr.co.grib.scheduling.repository.ScheduleRepository;
+import kr.co.grib.scheduling.service.kafka.KafkaService;
 import kr.co.grib.scheduling.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
+    private final KafkaService kafkaService;
     private final ScheduleRepository scheduleRepository;
     private final ClientRepository clientRepository;
     private static final Map<String, ThreadPoolTaskScheduler> scheduledMap = new HashMap<>();
@@ -102,6 +104,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         System.out.println(param.getScheduleId() +" : "+ param.getCronExpression());
         System.out.println(param.getScheduleId() +" : "+ param.getClientId());
         System.out.println(param.getScheduleId() +" : "+ param.getApiBody());
+        kafkaService.produceMessage(param);
         // try{
         //   Optional<Client> client = clientRepository.findById(param.getClientId());
         //   if(client.isPresent()){

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,14 +14,11 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import kr.co.grib.scheduling.domain.Client;
 import kr.co.grib.scheduling.domain.Schedule;
 import kr.co.grib.scheduling.dto.ScheduleDto;
 import kr.co.grib.scheduling.dto.common.PageResponse;
 import kr.co.grib.scheduling.dto.common.ResponseDto;
-import kr.co.grib.scheduling.repository.ClientRepository;
 import kr.co.grib.scheduling.repository.ScheduleRepository;
 import kr.co.grib.scheduling.service.kafka.KafkaService;
 import kr.co.grib.scheduling.service.schedule.ScheduleService;
@@ -36,7 +32,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private final KafkaService kafkaService;
     private final ScheduleRepository scheduleRepository;
-    private final ClientRepository clientRepository;
     private static final Map<String, ThreadPoolTaskScheduler> scheduledMap = new HashMap<>();
 
     @Override
@@ -48,8 +43,8 @@ public class ScheduleServiceImpl implements ScheduleService {
           Schedule newSchedule = Schedule.builder()
                                       .scheduleId(param.getScheduleId())
                                       .cronExpression(param.getCronExpression())
-                                      .apiBody(param.getApiBody())
-                                      .clientId(param.getClientId())
+                                      .message(param.getMessage())
+                                      .topic(param.getTopic())
                                       .build();
           scheduleRepository.save(newSchedule);
           ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -78,8 +73,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule newSchedule = Schedule.builder()
                               .scheduleId(param.getScheduleId())
                               .cronExpression(param.getCronExpression())
-                              .apiBody(param.getApiBody())
-                              .clientId(param.getClientId())
+                              .message(param.getMessage())
+                              .topic(param.getTopic())
                               .build();
         scheduleRepository.save(newSchedule);
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -102,28 +97,9 @@ public class ScheduleServiceImpl implements ScheduleService {
       return () -> {
         System.out.println(param.getScheduleId());
         System.out.println(param.getScheduleId() +" : "+ param.getCronExpression());
-        System.out.println(param.getScheduleId() +" : "+ param.getClientId());
-        System.out.println(param.getScheduleId() +" : "+ param.getApiBody());
+        System.out.println(param.getScheduleId() +" : "+ param.getTopic());
+        System.out.println(param.getScheduleId() +" : "+ param.getMessage());
         kafkaService.produceMessage(param);
-        // try{
-        //   Optional<Client> client = clientRepository.findById(param.getClientId());
-        //   if(client.isPresent()){
-        //     WebClient webClient = WebClient.create(client.get().getCallbackUrl());
-        //     JSONObject messageJson = new JSONObject(param.getApiBody());
-        //     Map<String, Object> bodyMap = messageJson.toMap();
-        //     String response = webClient.post()
-        //                               .header("Authorization", "Bearer " + client.get().getAccessToken())
-        //                               .bodyValue(bodyMap)
-        //                               .retrieve()
-        //                               .bodyToMono(String.class)
-        //                               .block();
-        //     log.info(response);
-        //   }else{
-        //     log.info(param.getClientId() + " : client is null.");
-        //   }
-        // }catch(Exception e){
-        //   e.printStackTrace();
-        // }
       };
     }
 
@@ -134,6 +110,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Optional<Schedule> schedule = scheduleRepository.findById(param.getScheduleId());
         scheduleRepository.delete(schedule.get());
         scheduledMap.get(param.getScheduleId()).shutdown();
+        if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 1){
+          kafkaService.deleteTopic(param);
+        }
         return ResponseDto.data(null);
       }catch (NullPointerException e){
         e.printStackTrace();
@@ -162,8 +141,8 @@ public class ScheduleServiceImpl implements ScheduleService {
           scheduleDtoList = scheduleList.stream().map(schedule -> {
               return new ScheduleDto(schedule);
           }).toList();
-      }else if(param.getClientId() != null){
-          scheduleList = scheduleRepository.findAllByClientIdContains(pageable, param.getClientId());
+      }else if(param.getTopic() != null){
+          scheduleList = scheduleRepository.findAllByTopicContains(pageable, param.getTopic());
           scheduleDtoList = scheduleList.stream().map(schedule -> {
               return new ScheduleDto(schedule);
           }).toList();

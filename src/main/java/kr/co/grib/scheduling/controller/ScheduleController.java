@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.grib.scheduling.dto.ScheduleDto;
 import kr.co.grib.scheduling.dto.common.ResponseDto;
-import kr.co.grib.scheduling.service.kafka.KafkaService;
 import kr.co.grib.scheduling.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/schedule")
 public class ScheduleController {
     private final ScheduleService scheduleService;
-    private final KafkaService kafkaService;
 
     @GetMapping("/read")
     public ResponseEntity<ResponseDto<List<ScheduleDto>>> readScheduleList(
@@ -67,19 +65,6 @@ public class ScheduleController {
             return ResponseEntity.ok(result);
         }else{
             return ResponseEntity.ok(ResponseDto.error("FAIL", apiStatus, null));
-        }
-    }
-
-    @PostMapping("/kafka/test")
-    public void testKafka(HttpServletRequest request) {
-        String apiStatus = (String) request.getAttribute("apiStatus");
-        if(apiStatus.equals("NORMAL")){
-            ScheduleDto param = new ScheduleDto();
-            param.setClientId("1");
-            param.setApiBody("2");
-            param.setCronExpression("3");
-            param.setScheduleId("4");
-            kafkaService.produceMessage(param);
         }
     }
 }

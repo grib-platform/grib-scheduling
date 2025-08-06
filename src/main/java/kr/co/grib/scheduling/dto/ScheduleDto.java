@@ -15,13 +15,13 @@ import lombok.Setter;
 public class ScheduleDto {
     private String scheduleId;
     private String cronExpression;
-    private String apiBody;
-    private String clientId;
+    private String message;
+    private String topic;
     
     public ScheduleDto(Schedule schedule){
         this.scheduleId = schedule.getScheduleId();
         this.cronExpression = schedule.getCronExpression();
-        this.apiBody = schedule.getApiBody();
-        this.clientId = schedule.getClientId();
+        this.message = schedule.getMessage();
+        this.topic = schedule.getTopic();
     }
 }

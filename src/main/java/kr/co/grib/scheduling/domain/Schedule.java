@@ -33,11 +33,11 @@ public class Schedule implements Persistable<String> {
     @Column(name = "cron_expression")
     private String cronExpression;
 
-    @Column(name = "api_body")
-    private String apiBody;
+    @Column(name = "message")
+    private String message;
 
-    @Column(name = "client_id")
-    private String clientId;
+    @Column(name = "topic")
+    private String topic;
 
     @Override
     public boolean isNew() {

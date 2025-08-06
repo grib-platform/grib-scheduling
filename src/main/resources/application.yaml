@@ -22,6 +22,9 @@ spring:
         database-platform: org.hibernate.dialect.MySQL8Dialect
     client:
         secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
+    kafka:
+        broker-num: 1
+        broker-server: "http://huring.grib-iot.com:9513"
 ---
 server:
     port: 9997
@@ -42,3 +45,6 @@ spring:
         show-sql: true
     client:
         secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
+    kafka:
+        broker-num: 1
+        broker-server: "http://huring.grib-iot.com:9513"

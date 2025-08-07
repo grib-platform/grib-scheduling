@@ -47,4 +47,4 @@ spring:
         secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
     kafka:
         broker-num: 1
-        broker-server: "192.168.0.240:29092"
+        broker-server: "http://192.168.0.240:29092"

@@ -47,4 +47,4 @@ spring:
         secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
     kafka:
         broker-num: 1
-        broker-server: "192.168.0.240:9092"
+        broker-server: "huring.grib-iot.com:9513"

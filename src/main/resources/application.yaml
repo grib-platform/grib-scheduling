@@ -21,7 +21,7 @@ spring:
         database: mysql
         database-platform: org.hibernate.dialect.MySQL8Dialect
     client:
-        secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
+        secret: $2a$10$a4RlLs39Mba7XhD9M5suSeBcG5iMbXh5XzfNREnGL5fmQEItbya3m
     kafka:
         broker-num: 1
         broker-server: "http://huring.grib-iot.com:9513"
@@ -44,7 +44,7 @@ spring:
             ddl-auto: none
         show-sql: true
     client:
-        secret: $2a$10$KbnVxY8OURWnvZ7LglOKzO8tRZ0XlZyfqkYSg8Rv4zurJBuc4W/Eu
+        secret: $2a$10$8.Q.gxUmGJP36W.uzANIsen8h.gmWJnfQAvHRH6BAIZ7pdYwM/hxG
     kafka:
         broker-num: 1
         broker-server: "http://192.168.0.240:29092"

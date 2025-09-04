@@ -49,6 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                                       .cronExpression(param.getCronExpression())
                                       .message(param.getMessage())
                                       .topic(param.getTopic())
+                                      .createdAt(LocalDateTime.now())
                                       .build();
           scheduleRepository.save(newSchedule);
           ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();

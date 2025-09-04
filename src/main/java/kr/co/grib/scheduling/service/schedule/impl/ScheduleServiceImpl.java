@@ -143,10 +143,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheduledMap.remove(param.getScheduleId());
             //스케쥴 수정
             if(param.getCronExpression() != null){
-              schedule.setCronExpression(schedule.getCronExpression());
+              schedule.setCronExpression(param.getCronExpression());
             }
             if(param.getTopic() != null){
-              schedule.setTopic(schedule.getTopic());
+              schedule.setTopic(param.getTopic());
               //토픽 수정시 실제 카프카 토픽 관리
               if(!schedule.getTopic().equals(param.getTopic())){//기존 토픽과 수정될 토픽이 다르다면
                 if(scheduleRepository.findAllByTopic(schedule.getTopic()).size() == 1){//기존 토픽을 사용하는 하나 남은 마지막 스케쥴러라면
@@ -158,13 +158,8 @@ public class ScheduleServiceImpl implements ScheduleService {
               }
             }
             if(param.getMessage() != null){
-              schedule.setMessage(schedule.getMessage());
+              schedule.setMessage(param.getMessage());
             }
-            System.out.println(schedule.getScheduleId());
-            System.out.println(schedule.getCronExpression());
-            System.out.println(schedule.getTopic());
-            System.out.println(schedule.getMessage());
-            System.out.println(schedule.getCreatedAt());
             scheduleRepository.save(schedule);
             //수정된 스케쥴 적용
             ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -235,7 +230,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         System.out.println(param.getScheduleId() +" : "+ param.getCronExpression());
         System.out.println(param.getScheduleId() +" : "+ param.getTopic());
         System.out.println(param.getScheduleId() +" : "+ param.getMessage());
-        // kafkaService.produceMessage(param);
+        kafkaService.produceMessage(param);
       };
     }
 }

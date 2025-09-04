@@ -1,5 +1,7 @@
 package kr.co.grib.scheduling.dto;
 
+import java.time.LocalDateTime;
+
 import kr.co.grib.scheduling.domain.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,11 +19,13 @@ public class ScheduleDto {
     private String cronExpression;
     private String message;
     private String topic;
+    private LocalDateTime createdAt;
     
     public ScheduleDto(Schedule schedule){
         this.scheduleId = schedule.getScheduleId();
         this.cronExpression = schedule.getCronExpression();
         this.message = schedule.getMessage();
         this.topic = schedule.getTopic();
+        this.createdAt = schedule.getCreatedAt();
     }
 }

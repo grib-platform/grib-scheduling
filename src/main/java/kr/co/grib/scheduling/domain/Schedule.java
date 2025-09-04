@@ -1,5 +1,7 @@
 package kr.co.grib.scheduling.domain;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -38,6 +40,9 @@ public class Schedule implements Persistable<String> {
 
     @Column(name = "topic")
     private String topic;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Override
     public boolean isNew() {

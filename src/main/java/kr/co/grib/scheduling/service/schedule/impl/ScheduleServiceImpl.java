@@ -213,6 +213,11 @@ public class ScheduleServiceImpl implements ScheduleService {
                               .topic(param.getTopic())
                               .build();
         scheduleRepository.save(newSchedule);
+          
+        if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//생성하려는 토픽을 사용중인 스케쥴러가 없다면
+          kafkaService.createTopic(param);//토픽 새로 생성
+        }
+
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.initialize();
         scheduler.schedule(getRunnable(param), new CronTrigger(param.getCronExpression()));

@@ -1,4 +1,6 @@
-package kr.co.grib.scheduling.domain;
+package kr.co.grib.scheduling.domain.scheduling;
+
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,31 +23,34 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-@EqualsAndHashCode(of = { "clientId" })
+@EqualsAndHashCode(of = { "scheduleId" })
 @Entity
-@Table(name = "tb_client")
+@Table(name = "tb_schedule")
 @EntityListeners(AuditingEntityListener.class)
-public class Client implements Persistable<String> {
+public class Schedule implements Persistable<String> {
     @Id
-    @Column(name = "client_id")
-    private String clientId;
+    @Column(name = "schedule_id")
+    private String scheduleId;
 
-    @Column(name = "access_token")
-    private String accessToken;
+    @Column(name = "cron_expression")
+    private String cronExpression;
 
-    @Column(name = "refresh_token")
-    private String refreshToken;
+    @Column(name = "message")
+    private String message;
 
-    @Column(name = "callback_url")
-    private String callbackUrl;
+    @Column(name = "topic")
+    private String topic;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Override
     public boolean isNew() {
-        return clientId == null;
+        return scheduleId == null;
     }
 
     @Override
     public String getId() {
-        return clientId;
+        return scheduleId;
     }
 }

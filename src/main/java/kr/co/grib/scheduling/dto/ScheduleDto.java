@@ -2,7 +2,7 @@ package kr.co.grib.scheduling.dto;
 
 import java.time.LocalDateTime;
 
-import kr.co.grib.scheduling.domain.Schedule;
+import kr.co.grib.scheduling.domain.scheduling.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

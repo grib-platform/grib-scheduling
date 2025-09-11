@@ -13,10 +13,16 @@ spring:
         activate:
             on-profile: local
     datasource:
-        url: jdbc:mysql://localhost:3306/grib_scheduling
-        username: root
-        password: grib12#$
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        db1:
+            jdbc-url: jdbc:mysql://localhost:3306/grib_scheduling
+            username: root
+            password: grib12#$
+            driver-class-name: com.mysql.cj.jdbc.Driver
+        db2:
+            jdbc-url: jdbc:mysql://localhost:3306/db_oauth
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: root
+            password: grib12#$
     jpa:
         database: mysql
         database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -33,10 +39,16 @@ spring:
         activate:
             on-profile: dev
     datasource:
-        url: jdbc:mysql://192.168.0.240:3306/scheduling_dev
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        username: grib
-        password: grib12!@
+        db1:
+            jdbc-url: jdbc:mysql://192.168.0.240:3306/scheduling_dev
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: grib
+            password: grib12!@
+        db2:
+            jdbc-url: jdbc:mysql://192.168.0.240:3306/oauth_dev
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            username: grib
+            password: grib12!@
     jpa:
         database: mysql
         database-platform: org.hibernate.dialect.MySQL8Dialect

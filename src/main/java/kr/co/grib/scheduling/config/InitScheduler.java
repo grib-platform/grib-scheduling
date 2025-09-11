@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
-import kr.co.grib.scheduling.domain.Schedule;
+import kr.co.grib.scheduling.domain.scheduling.Schedule;
 import kr.co.grib.scheduling.dto.ScheduleDto;
-import kr.co.grib.scheduling.repository.ScheduleRepository;
+import kr.co.grib.scheduling.repository.scheduling.ScheduleRepository;
 import kr.co.grib.scheduling.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

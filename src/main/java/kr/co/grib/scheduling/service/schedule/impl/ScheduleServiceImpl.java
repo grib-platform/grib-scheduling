@@ -18,12 +18,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import kr.co.grib.scheduling.domain.Schedule;
+import kr.co.grib.scheduling.domain.scheduling.Schedule;
 import kr.co.grib.scheduling.dto.ScheduleDto;
 import kr.co.grib.scheduling.dto.SearchDto;
 import kr.co.grib.scheduling.dto.common.PageResponse;
 import kr.co.grib.scheduling.dto.common.ResponseDto;
-import kr.co.grib.scheduling.repository.ScheduleRepository;
+import kr.co.grib.scheduling.repository.scheduling.ScheduleRepository;
 import kr.co.grib.scheduling.service.kafka.KafkaService;
 import kr.co.grib.scheduling.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;

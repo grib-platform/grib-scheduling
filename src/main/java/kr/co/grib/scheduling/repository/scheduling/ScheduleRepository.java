@@ -1,4 +1,4 @@
-package kr.co.grib.scheduling.repository;
+package kr.co.grib.scheduling.repository.scheduling;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import kr.co.grib.scheduling.domain.Schedule;
+import kr.co.grib.scheduling.domain.scheduling.Schedule;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, String> {
     List<Schedule> findAllByTopic(String topic);

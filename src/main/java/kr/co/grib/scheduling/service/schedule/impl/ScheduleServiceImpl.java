@@ -54,6 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
           scheduleRepository.save(newSchedule);
           
           if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//생성하려는 토픽을 사용중인 스케쥴러가 없다면
+            System.out.println("토픽생성");
             kafkaService.createTopic(param);//토픽 새로 생성
           }
 

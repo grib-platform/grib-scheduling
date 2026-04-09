@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class KafkaServiceImpl implements KafkaService {
 
-    @Value("${spring.kafka.broker-num}")
-    private int brokerNum;
+    @Value("${spring.kafka.replication-factor}")
+    private int replicationFactor;
   
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final AdminClient adminClient;
@@ -39,7 +39,7 @@ public class KafkaServiceImpl implements KafkaService {
     @Transactional
     public ResponseDto<Void> createTopic(ScheduleDto param) {
       try {
-        NewTopic newTopic = new NewTopic(param.getTopic(), 1, (short) brokerNum);
+        NewTopic newTopic = new NewTopic(param.getTopic(), 1, (short) replicationFactor);
         CreateTopicsResult result = adminClient.createTopics(Collections.singleton(newTopic));
         result.all().get();  // Blocking to ensure it is created
         log.info("Topic '" + param.getTopic() + "' created successfully.");

@@ -7,7 +7,7 @@ spring:
             dev: dev
 ---
 server:
-    port: 8080
+    port: 8081
 spring:
     config:
         activate:
@@ -27,9 +27,10 @@ spring:
         database: mysql
         database-platform: org.hibernate.dialect.MySQL8Dialect
     client:
-        secret: $2a$10$a4RlLs39Mba7XhD9M5suSeBcG5iMbXh5XzfNREnGL5fmQEItbya3m
+        # secret: $2a$10$a4RlLs39Mba7XhD9M5suSeBcG5iMbXh5XzfNREnGL5fmQEItbya3m
+        secret: $2a$10$8.Q.gxUmGJP36W.uzANIsen8h.gmWJnfQAvHRH6BAIZ7pdYwM/hxG
     kafka:
-        broker-num: 1
+        replication-factor: 1
         broker-server: "http://huring.grib-iot.com:9513"
 ---
 server:
@@ -63,5 +64,5 @@ spring:
     client:
         secret: $2a$10$8.Q.gxUmGJP36W.uzANIsen8h.gmWJnfQAvHRH6BAIZ7pdYwM/hxG
     kafka:
-        broker-num: 1
+        replication-factor: 1
         broker-server: "http://192.168.0.240:29092"

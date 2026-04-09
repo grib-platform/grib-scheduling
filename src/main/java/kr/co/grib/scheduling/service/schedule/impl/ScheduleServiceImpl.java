@@ -44,6 +44,12 @@ public class ScheduleServiceImpl implements ScheduleService {
       try{
         Optional<Schedule> schedule = scheduleRepository.findById(param.getScheduleId());
         if(!schedule.isPresent()){
+          
+          if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//생성하려는 토픽을 사용중인 스케쥴러가 없다면
+            System.out.println("토픽생성");
+            kafkaService.createTopic(param);//토픽 새로 생성
+          }
+
           Schedule newSchedule = Schedule.builder()
                                       .scheduleId(param.getScheduleId())
                                       .cronExpression(param.getCronExpression())
@@ -52,11 +58,6 @@ public class ScheduleServiceImpl implements ScheduleService {
                                       .createdAt(LocalDateTime.now())
                                       .build();
           scheduleRepository.save(newSchedule);
-          
-          if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//생성하려는 토픽을 사용중인 스케쥴러가 없다면
-            System.out.println("토픽생성");
-            kafkaService.createTopic(param);//토픽 새로 생성
-          }
 
           ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
           scheduler.initialize();
@@ -147,21 +148,22 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheduledMap.get(param.getScheduleId()).shutdown();
             //스케쥴 제거
             scheduledMap.remove(param.getScheduleId());
-            //스케쥴 수정
+            
+            //토픽 수정시 실제 카프카 토픽 관리
+            if(!schedule.getTopic().equals(param.getTopic())){//기존 토픽과 수정될 토픽이 다르다면
+              if(scheduleRepository.findAllByTopic(schedule.getTopic()).size() == 1){//기존 토픽을 사용하는 하나 남은 마지막 스케쥴러라면
+                kafkaService.deleteTopic(new ScheduleDto(schedule));//기존에 사용중인 토픽 삭제
+              }
+              if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//수정하려는 토픽을 사용중인 스케쥴러가 없다면
+                kafkaService.createTopic(param);//수정된 토픽 새로 생성
+              }
+            }
+
             if(param.getCronExpression() != null){
               schedule.setCronExpression(param.getCronExpression());
             }
             if(param.getTopic() != null){
               schedule.setTopic(param.getTopic());
-              //토픽 수정시 실제 카프카 토픽 관리
-              if(!schedule.getTopic().equals(param.getTopic())){//기존 토픽과 수정될 토픽이 다르다면
-                if(scheduleRepository.findAllByTopic(schedule.getTopic()).size() == 1){//기존 토픽을 사용하는 하나 남은 마지막 스케쥴러라면
-                  kafkaService.deleteTopic(new ScheduleDto(schedule));//기존에 사용중인 토픽 삭제
-                }
-                if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//수정하려는 토픽을 사용중인 스케쥴러가 없다면
-                  kafkaService.createTopic(param);//수정된 토픽 새로 생성
-                }
-              }
             }
             if(param.getMessage() != null){
               schedule.setMessage(param.getMessage());
@@ -184,13 +186,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public ResponseDto<Void> deleteSchedule(ScheduleDto param) {
       try{
+        if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 1){
+          kafkaService.deleteTopic(param);
+        }
         Optional<Schedule> schedule = scheduleRepository.findById(param.getScheduleId());
         scheduleRepository.delete(schedule.get());
         scheduledMap.get(param.getScheduleId()).shutdown();
         scheduledMap.remove(param.getScheduleId());
-        if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 1){
-          kafkaService.deleteTopic(param);
-        }
         return ResponseDto.data(null);
       }catch (NullPointerException e){
         e.printStackTrace();
@@ -207,6 +209,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public ResponseDto<Void> startScheduleInit(ScheduleDto param) {
       try{
+        if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//생성하려는 토픽을 사용중인 스케쥴러가 없다면
+          System.out.println("토픽생성");
+          kafkaService.createTopic(param);//토픽 새로 생성
+        }
+
         Schedule newSchedule = Schedule.builder()
                               .scheduleId(param.getScheduleId())
                               .cronExpression(param.getCronExpression())
@@ -214,10 +221,6 @@ public class ScheduleServiceImpl implements ScheduleService {
                               .topic(param.getTopic())
                               .build();
         scheduleRepository.save(newSchedule);
-          
-        if(scheduleRepository.findAllByTopic(param.getTopic()).size() == 0){//생성하려는 토픽을 사용중인 스케쥴러가 없다면
-          kafkaService.createTopic(param);//토픽 새로 생성
-        }
 
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.initialize();

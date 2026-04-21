@@ -35,11 +35,6 @@ spring:
 ---
 server:
     port: 9997
-    ssl:
-        enabled: true
-        key-store: classpath:ssl/_wildcard_.grib-iot.com_202504073F0DF.jks
-        key-store-password: 2zp9y22f
-        key-store-type: JKS
 spring:
     config:
         activate:

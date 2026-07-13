@@ -31,7 +31,7 @@ spring:
         secret: $2a$10$8.Q.gxUmGJP36W.uzANIsen8h.gmWJnfQAvHRH6BAIZ7pdYwM/hxG
     kafka:
         replication-factor: 1
-        broker-server: "http://huring.grib-iot.com:9513"
+        broker-server: "http://thingx.grib-iot.com:9513"
 ---
 server:
     port: 9997

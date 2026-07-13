@@ -30,7 +30,7 @@ public class AuthController {
 			formData.add("grant_type", "authorization_code");
 			formData.add("code", code);
 			formData.add("scope", "user");
-			formData.add("redirect_uri", "http://huring.grib-iot.com:9512/oauth/callback");
+			formData.add("redirect_uri", "http://thingx.grib-iot.com:9512/oauth/callback");
 			String response = client.post()
 								.uri("/oauth2/token")
 								.contentType(MediaType.APPLICATION_FORM_URLENCODED)
